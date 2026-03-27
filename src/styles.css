@@ -1,3 +1,259 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
+
+:root {
+	--pm-bg-start: #f4f7fb;
+	--pm-bg-end: #e7eef8;
+	--pm-text: #1c2b3a;
+	--pm-primary: #0f3b66;
+	--pm-primary-soft: rgba(15, 59, 102, 0.15);
+	--pm-border: #c7d3e3;
+	--pm-danger: #b42318;
+	--pm-danger-soft: rgba(180, 35, 24, 0.12);
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	color: var(--pm-text);
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.home-container {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	background: linear-gradient(135deg, var(--pm-bg-start) 0%, var(--pm-bg-end) 100%);
+	color: var(--pm-text);
+}
+
+.banner {
+	text-align: center;
+	padding: 2rem 1rem;
+	background: var(--pm-primary);
+	color: #fff;
+}
+
+.banner h1 {
+	margin: 0;
+	font-size: 2rem;
+	letter-spacing: 0.5px;
+}
+
+.banner p {
+	margin-top: 0.5rem;
+	opacity: 0.9;
+}
+
+.content {
+	flex: 1;
+	padding: 2rem 1rem;
+}
+
+.footer {
+	border-top: 1px solid #d8e2ef;
+	padding: 1rem;
+	text-align: center;
+	background: #fff;
+}
+
+.footer nav {
+	margin-top: 0.5rem;
+	display: flex;
+	justify-content: center;
+	gap: 1rem;
+	flex-wrap: wrap;
+}
+
+.footer a {
+	color: var(--pm-primary);
+	text-decoration: none;
+	font-weight: 500;
+}
+
+.footer a:hover {
+	text-decoration: underline;
+}
+
+input,
+select,
+textarea,
+button {
+	font: inherit;
+}
+
+input,
+select,
+textarea {
+	width: 100%;
+	border: 1px solid var(--pm-border);
+	border-radius: 10px;
+	padding: 0.75rem 0.9rem;
+	box-sizing: border-box;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus-visible {
+	outline: none;
+	border-color: var(--pm-primary);
+	box-shadow: 0 0 0 3px var(--pm-primary-soft);
+}
+
+button {
+	border: none;
+	border-radius: 10px;
+	padding: 0.75rem 1rem;
+	font-weight: 600;
+	color: #fff;
+	background: var(--pm-primary);
+	cursor: pointer;
+    margin: 10px 0px;
+	transition: transform 0.08s ease, opacity 0.2s ease;
+}
+
+button:hover:not(:disabled) {
+	transform: translateY(-1px);
+}
+
+button:disabled {
+	opacity: 0.55;
+	cursor: not-allowed;
+}
+
+.btn-primary,
+.btn-secondary {
+	background: var(--pm-primary);
+	color: #fff;
+}
+
+.btn-danger {
+	background: var(--pm-danger);
+	color: #fff;
+}
+
+.panel {
+	border: 1px solid #d6dce7;
+	border-radius: 12px;
+	padding: 1rem;
+	background: #fff;
+}
+
+legend {
+	font-weight: 600;
+	padding: 0 0.4rem;
+}
+
+.grid {
+	display: grid;
+	gap: 0.9rem;
+}
+
+.customer-grid {
+	grid-template-columns: repeat(2, minmax(220px, 1fr));
+}
+
+.full-width {
+	grid-column: 1 / -1;
+}
+
+label {
+	display: grid;
+	gap: 0.35rem;
+	font-weight: 500;
+}
+
+.detail-actions {
+	margin-bottom: 0.75rem;
+}
+
+.table-wrapper {
+	overflow-x: auto;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	min-width: 760px;
+}
+
+th,
+td {
+	border-bottom: 1px solid #e6ebf4;
+	padding: 0.6rem;
+	text-align: left;
+}
+
+.summary {
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+}
+
+.summary p {
+	margin: 0;
+	font-weight: 600;
+}
+
+.summary strong {
+	font-size: 1.35rem;
+}
+
+.submit-row {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.confirmation {
+	background: #eef4fb;
+	border-color: #c3d6ee;
+}
+
+input.ng-invalid.ng-touched,
+select.ng-invalid.ng-touched,
+textarea.ng-invalid.ng-touched {
+	border-color: var(--pm-danger);
+	box-shadow: 0 0 0 3px var(--pm-danger-soft);
+}
+
+.login-section {
+	width: 100%;
+	max-width: 420px;
+	background: #fff;
+	border-radius: 14px;
+	padding: 1.5rem;
+	box-shadow: 0 10px 30px rgba(15, 59, 102, 0.12);
+	margin: 0 auto;
+}
+
+.sale-section {
+	width: 100%;
+	max-width: 1100px;
+	margin: 0 auto;
+}
+
+.sale-form {
+	display: grid;
+	gap: 1rem;
+}
+
+@media (max-width: 780px) {
+	.customer-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.submit-row {
+		justify-content: stretch;
+	}
+
+	.submit-row .btn-primary,
+	.submit-row button[type='submit'] {
+		width: 100%;
+	}
+}

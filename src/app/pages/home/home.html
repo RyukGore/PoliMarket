@@ -27,6 +27,10 @@
             @if (nitModel.errors?.['pattern']) { El NIT solo debe contener números. }
           </small>
         }
+        @if (authError()) {
+          <small class="auth-error" aria-live="polite">{{ authError() }}</small>
+        }
+        <br />
         <button type="submit" [disabled]="!form.valid">Ingresar</button>
       </form>
     </section>
