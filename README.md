@@ -10,7 +10,14 @@ To start a local development server, run:
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Once the server is running, open your browser and navigate to `http://localhost:5200/`. The application will automatically reload whenever you modify any of the source files.
+
+## run api with mock
+```bash
+src/assets/mock/PoliMarket.json
+```
+
+Import the file in aplication Mockonn for run exaple the api.
 
 ## Code scaffolding
 
