@@ -1,0 +1,145 @@
+<div class="home-container" aria-labelledby="sale-title">
+  <header class="banner">
+    <h1 id="sale-title">PoliMarket</h1>
+    <p>Completa la venta del cliente</p>
+  </header>
+
+  <main class="content">
+    <section class="sale-section">
+      <form [formGroup]="saleForm" (ngSubmit)="saveSale()" class="sale-form">
+        <fieldset class="panel">
+          <legend>Datos del cliente</legend>
+
+          <div class="grid customer-grid">
+            <label class="full-width">
+              <span>Nombre cliente</span>
+              <input type="text" formControlName="customerName" placeholder="Ej: Ana Restrepo" />
+            </label>
+
+            <label>
+              <span>Tipo de documento</span>
+              <select formControlName="documentType">
+                @for (type of documentTypes; track type) {
+                  <option [value]="type">{{ type }}</option>
+                }
+              </select>
+            </label>
+
+            <label>
+              <span>Documento</span>
+              <input
+                type="text"
+                formControlName="documentNumber"
+                placeholder="Número de documento"
+              />
+            </label>
+
+            <label class="full-width">
+              <span>Dirección</span>
+              <input type="text" formControlName="address" placeholder="Dirección del cliente" />
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset class="panel" formArrayName="details">
+          <legend>Detalle de venta</legend>
+
+          <div class="detail-actions">
+            <button type="button" class="btn-secondary" (click)="addDetailLine()">
+              Agregar producto
+            </button>
+          </div>
+
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID producto</th>
+                  <th>Nombre producto</th>
+                  <th>Cantidad</th>
+                  <th>Precio unitario</th>
+                  <th>Total</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (line of saleDetails.controls; track $index; let i = $index) {
+                  <tr [formGroupName]="i">
+                    <td>
+                      <input type="text" formControlName="productId" placeholder="ID" />
+                    </td>
+                    <td>
+                      <input type="text" formControlName="productName" placeholder="Nombre" />
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        formControlName="quantity"
+                        min="1"
+                        (input)="updateLineTotal(i)"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        formControlName="unitPrice"
+                        min="0"
+                        step="0.01"
+                        (input)="updateLineTotal(i)"
+                      />
+                    </td>
+                    <td>
+                      <input type="number" formControlName="total" readonly />
+                    </td>
+                    <td>
+                      <button
+                        type="button"
+                        class="btn-danger"
+                        (click)="removeDetailLine(i)"
+                        [disabled]="saleDetails.length === 1"
+                      >
+                        Quitar
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+
+        <section class="summary panel" aria-live="polite">
+          <p>Total general de la venta</p>
+          <strong>{{ grandTotal() | number: '1.2-2' }}</strong>
+        </section>
+
+        <div class="submit-row">
+          <button type="submit" [disabled]="!saleForm.valid">Guardar venta</button>
+        </div>
+
+        @if (savedSale(); as sale) {
+          <section class="panel confirmation" aria-live="polite">
+            <h2>Venta guardada</h2>
+            <p>
+              Cliente: <strong>{{ sale.customerName }}</strong> - Documento:
+              <strong>{{ sale.documentType }}</strong>
+              {{ sale.documentNumber }}
+            </p>
+            <p>
+              Total final: <strong>{{ sale.grandTotal | number: '1.2-2' }}</strong>
+            </p>
+          </section>
+        }
+      </form>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2026 PoliMarket. Todos los derechos reservados.</p>
+    <nav aria-label="Enlaces del footer">
+      <a href="#">Términos y condiciones</a>
+      <a href="#">Política de privacidad</a>
+      <a href="#">Contacto</a>
+    </nav>
+  </footer>
+</div>
