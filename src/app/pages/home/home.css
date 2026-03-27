@@ -1,0 +1,125 @@
+.home-container {
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+background: linear-gradient(135deg, #f4f7fb 0%, #e7eef8 100%);
+color: #1c2b3a;
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.banner {
+text-align: center;
+padding: 2rem 1rem;
+background: #0f3b66;
+color: #fff;
+}
+
+.banner h1 {
+margin: 0;
+font-size: 2rem;
+letter-spacing: 0.5px;
+}
+
+.banner p {
+margin-top: 0.5rem;
+opacity: 0.9;
+}
+
+.content {
+flex: 1;
+display: grid;
+place-items: center;
+padding: 2rem 1rem;
+}
+
+.login-section {
+width: 100%;
+max-width: 420px;
+background: #fff;
+border-radius: 14px;
+padding: 1.5rem;
+box-shadow: 0 10px 30px rgba(15, 59, 102, 0.12);
+}
+
+.login-section h2 {
+margin-top: 0;
+margin-bottom: 1rem;
+text-align: center;
+}
+
+form {
+display: flex;
+flex-direction: column;
+gap: 0.9rem;
+}
+
+input[type='text'] {
+width: 100%;
+padding: 0.75rem 0.9rem;
+border: 1px solid #c7d3e3;
+border-radius: 10px;
+font-size: 1rem;
+outline: none;
+transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input[type='text']:focus {
+border-color: #0f3b66;
+box-shadow: 0 0 0 3px rgba(15, 59, 102, 0.15);
+}
+
+button[type='submit'] {
+border: none;
+border-radius: 10px;
+padding: 0.75rem 1rem;
+font-weight: 600;
+color: #fff;
+background: #0f3b66;
+cursor: pointer;
+transition: transform 0.08s ease, opacity 0.2s ease;
+}
+
+button[type='submit']:hover:not(:disabled) {
+transform: translateY(-1px);
+}
+
+button[type='submit']:disabled {
+opacity: 0.55;
+cursor: not-allowed;
+}
+
+.footer {
+border-top: 1px solid #d8e2ef;
+padding: 1rem;
+text-align: center;
+background: #fff;
+}
+
+.footer nav {
+margin-top: 0.5rem;
+display: flex;
+justify-content: center;
+gap: 1rem;
+flex-wrap: wrap;
+}
+
+.footer a {
+color: #0f3b66;
+text-decoration: none;
+font-weight: 500;
+}
+
+.footer a:hover {
+text-decoration: underline;
+}
+
+.nit-error {
+  color: #b42318;
+  font-size: 0.875rem;
+  margin-top: -0.25rem;
+}
+
+input[type='text'].ng-invalid.ng-touched {
+  border-color: #b42318;
+  box-shadow: 0 0 0 3px rgba(180, 35, 24, 0.12);
+}

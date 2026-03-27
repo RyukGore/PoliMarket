@@ -1,0 +1,43 @@
+<div class="home-container">
+  <header class="banner">
+    <h1>PoliMarket</h1>
+    <p>Bienvenido a nuestro marketplace</p>
+  </header>
+
+  <main class="content">
+    <section class="login-section">
+      <h2>Ingresa tu NIT para continuar</h2>
+      <form (ngSubmit)="onSubmit()" #form="ngForm">
+        <input
+          type="text"
+          name="nit"
+          placeholder="NIT"
+          [(ngModel)]="nit"
+          #nitModel="ngModel" 
+          required
+          pattern="^[0-9]+$"
+          inputmode="numeric"
+          maxlength="12"
+          aria-label="Campo NIT"
+          (input)="onNitInput($event)"
+        />
+        @if (nitModel.invalid && (nitModel.dirty || nitModel.touched)) {
+          <small class="nit-error">
+            @if (nitModel.errors?.['required']) { El NIT es obligatorio. }
+            @if (nitModel.errors?.['pattern']) { El NIT solo debe contener números. }
+          </small>
+        }
+        <button type="submit" [disabled]="!form.valid">Ingresar</button>
+      </form>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2026 PoliMarket. Todos los derechos reservados.</p>
+    <nav aria-label="Enlaces del footer">
+      <a href="#">Términos y condiciones</a>
+      <a href="#">Política de privacidad</a>
+      <a href="#">Contacto</a>
+    </nav>
+  </footer>
+</div>
