@@ -6,25 +6,24 @@
 
   <main class="content">
     <section class="login-section">
-      <h2>Ingresa tu NIT para continuar</h2>
+      <h2>Ingresa tu ID de vendedor para continuar</h2>
       <form (ngSubmit)="onSubmit()" #form="ngForm">
         <input
           type="text"
-          name="nit"
-          placeholder="NIT"
-          [(ngModel)]="nit"
-          #nitModel="ngModel" 
+          name="idVendedor"
+          placeholder="ID Vendedor"
+          [(ngModel)]="idVendedor"
+          #vendedorModel="ngModel"
           required
-          pattern="^[0-9]+$"
-          inputmode="numeric"
-          maxlength="12"
-          aria-label="Campo NIT"
-          (input)="onNitInput($event)"
+          pattern="^[a-zA-Z0-9\-]+$"
+          maxlength="20"
+          aria-label="Campo ID Vendedor"
+          (input)="onVendedorInput($event)"
         />
-        @if (nitModel.invalid && (nitModel.dirty || nitModel.touched)) {
+        @if (vendedorModel.invalid && (vendedorModel.dirty || vendedorModel.touched)) {
           <small class="nit-error">
-            @if (nitModel.errors?.['required']) { El NIT es obligatorio. }
-            @if (nitModel.errors?.['pattern']) { El NIT solo debe contener números. }
+            @if (vendedorModel.errors?.['required']) { El ID de vendedor es obligatorio. }
+            @if (vendedorModel.errors?.['pattern']) { Solo se permiten letras, números y guión. }
           </small>
         }
         @if (authError()) {

@@ -1,23 +1,18 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-
-export interface AuthorizationResponse {
-    idVendedor: number;
-    nombre: string;
-    estaAutorizado: boolean;
-    token: string;
-}
+import { API_BASE_URL } from '../tokens/api-base-url.token';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class HumanResourcesService {
 	private readonly http = inject(HttpClient);
-	private readonly authorizationUrl =
-		'http://localhost:3001/api/polimarket/authorization';
+	private readonly baseUrl = inject(API_BASE_URL);
 
-	authorizeByNit(nit: string): Observable<AuthorizationResponse> {
-		return this.http.post<AuthorizationResponse>(this.authorizationUrl, { nit });
+	authorizeByNit(idVendedor: string): Observable<any> {
+		return this.http.get(
+			`${this.baseUrl}/api/recursos-humanos/validar-vendedor/${idVendedor}`
+		);
 	}
 }

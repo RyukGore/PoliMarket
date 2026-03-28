@@ -13,49 +13,41 @@ export class Home {
   private readonly router = inject(Router);
   private readonly humanResourcesService = inject(HumanResourcesService);
 
-  nit = '';
+  idVendedor = '';
   readonly authError = signal('');
 
-  /**
-   * Maneja la entrada del NIT, permitiendo solo números.
-   * @param event Evento de entrada del NIT
-   */
-  onNitInput(event: Event): void {
+  onVendedorInput(event: Event): void {
     const input = event.target as HTMLInputElement;
-    const soloNumeros = input.value.replace(/\D/g, '');
-    this.nit = soloNumeros;
-    input.value = soloNumeros;
+    // Solo letras, números y guión; sin caracteres especiales
+    const sanitizado = input.value.replace(/[^a-zA-Z0-9\-]/g, '');
+    this.idVendedor = sanitizado;
+    input.value = sanitizado;
     this.authError.set('');
   }
 
-  /**
-   * Maneja el envío del formulario de NIT.
-   * @returns void
-   */
   onSubmit(): void {
-    const nitLimpio = this.nit.trim();
+    const idLimpio = this.idVendedor.trim();
 
-    if (!nitLimpio || !/^\d+$/.test(nitLimpio)) {
+    if (!idLimpio) {
       return;
     }
 
     this.authError.set('');
 
-    this.humanResourcesService.authorizeByNit(nitLimpio).subscribe({
+    this.humanResourcesService.authorizeByNit(idLimpio).subscribe({
       next: (res) => {
-        if (!res.estaAutorizado) {
-          this.authError.set('El NIT no está autorizado para continuar.');
-          return;
-        }
-
-        localStorage.setItem('polimarket_token', res.token);
-        localStorage.setItem('polimarket_nit', nitLimpio);
-        localStorage.setItem('polimarket_nombre', res.nombre);
+        localStorage.setItem('polimarket_idVendedor', idLimpio);
         void this.router.navigate(['/sale']);
       },
       error: (error) => {
-        this.authError.set('No se pudo validar la autorización del NIT. Intenta nuevamente.');
-        console.error('No se pudo validar la autorización del NIT.', error);
+        if (error.status === 404) {
+          this.authError.set('El ID de vendedor no está autorizado para continuar.');
+          return;
+        }
+        else {
+          this.authError.set('No se pudo validar la autorización. Intenta nuevamente.');
+          console.error('No se pudo validar la autorización del ID de vendedor.', error); 
+        }
       },
     });
   }
