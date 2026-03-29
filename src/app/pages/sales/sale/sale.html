@@ -1,7 +1,33 @@
 <div class="home-container" aria-labelledby="sale-title">
   <header class="banner">
-    <h1 id="sale-title">PoliMarket</h1>
-    <p>Completa la venta del cliente</p>
+    <div class="sale-header-inner">
+      <div class="sale-header-copy">
+        <h1 id="sale-title">PoliMarket</h1>
+        <p>Completa la venta del cliente</p>
+      </div>
+
+      <nav class="sale-menu" aria-label="Acciones de venta">
+        <button
+          type="button"
+          class="sale-menu-item"
+          [class.is-active]="!showSalesModal()"
+          (click)="startNewSale()"
+        >
+          Nueva venta
+        </button>
+        <button
+          type="button"
+          class="sale-menu-item"
+          [class.is-active]="showSalesModal()"
+          (click)="openSalesModal()"
+        >
+          Ventas realizadas
+        </button>
+        <button type="button" class="sale-menu-item" (click)="refreshStock()">
+          Actualizar stock
+        </button>
+      </nav>
+    </div>
   </header>
 
   <main class="content">
@@ -9,13 +35,7 @@
       <form [formGroup]="saleForm" (ngSubmit)="saveSale()" class="sale-form">
         <fieldset class="panel">
           <legend>Datos del cliente</legend>
-
           <div class="grid customer-grid">
-            <label class="full-width">
-              <span>Nombre cliente</span>
-              <input type="text" formControlName="customerName" placeholder="Ej: Ana Restrepo" />
-            </label>
-
             <label>
               <span>Tipo de documento</span>
               <select formControlName="documentType">
@@ -33,22 +53,63 @@
                 placeholder="Número de documento"
               />
             </label>
-
-            <label class="full-width">
-              <span>Dirección</span>
-              <input type="text" formControlName="address" placeholder="Dirección del cliente" />
-            </label>
           </div>
+        </fieldset>
+
+        <fieldset class="panel">
+          <legend>Productos disponibles</legend>
+
+          @if (loadingProducts()) {
+            <p>Cargando productos...</p>
+          }
+
+          @if (loadError()) {
+            <p class="sale-error" aria-live="polite">{{ loadError() }}</p>
+          }
+
+          @if (!loadingProducts() && availableProducts().length === 0) {
+            <p>No hay productos disponibles en este momento.</p>
+          }
+
+          @if (availableProducts().length > 0) {
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID producto</th>
+                    <th>Nombre</th>
+                    <th>Precio</th>
+                    <th>Disponible</th>
+                    <th>Acción</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (product of availableProducts(); track product.idProducto) {
+                    <tr>
+                      <td>{{ product.idProducto }}</td>
+                      <td>{{ product.nombre }}</td>
+                      <td>{{ product.precio | number: '1.0-0' }}</td>
+                      <td>{{ getAvailableStock(product) }}</td>
+                      <td>
+                        <button
+                          type="button"
+                          class="btn-secondary"
+                          (click)="addProductToSale(product)"
+                          [disabled]="getAvailableStock(product) === 0"
+                        >
+                          Agregar a venta
+                        </button>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
         </fieldset>
 
         <fieldset class="panel" formArrayName="details">
           <legend>Detalle de venta</legend>
-
-          <div class="detail-actions">
-            <button type="button" class="btn-secondary" (click)="addDetailLine()">
-              Agregar producto
-            </button>
-          </div>
 
           <div class="table-wrapper">
             <table>
@@ -56,6 +117,7 @@
                 <tr>
                   <th>ID producto</th>
                   <th>Nombre producto</th>
+                  <th>Disponible</th>
                   <th>Cantidad</th>
                   <th>Precio unitario</th>
                   <th>Total</th>
@@ -66,16 +128,20 @@
                 @for (line of saleDetails.controls; track $index; let i = $index) {
                   <tr [formGroupName]="i">
                     <td>
-                      <input type="text" formControlName="productId" placeholder="ID" />
+                      <input type="text" formControlName="productId" readonly />
                     </td>
                     <td>
-                      <input type="text" formControlName="productName" placeholder="Nombre" />
+                      <input type="text" formControlName="productName" readonly />
+                    </td>
+                    <td>
+                      <input type="number" formControlName="availableStock" readonly />
                     </td>
                     <td>
                       <input
                         type="number"
                         formControlName="quantity"
                         min="1"
+                        [max]="line.controls.availableStock.value"
                         (input)="updateLineTotal(i)"
                       />
                     </td>
@@ -85,7 +151,7 @@
                         formControlName="unitPrice"
                         min="0"
                         step="0.01"
-                        (input)="updateLineTotal(i)"
+                        readonly
                       />
                     </td>
                     <td>
@@ -106,6 +172,10 @@
               </tbody>
             </table>
           </div>
+
+          @if (saleDetails.length === 0) {
+            <p class="sale-note">Aun no has agregado productos al detalle de la venta.</p>
+          }
         </fieldset>
 
         <section class="summary panel" aria-live="polite">
@@ -113,16 +183,28 @@
           <strong>{{ grandTotal() | number: '1.2-2' }}</strong>
         </section>
 
+        @if (submitError()) {
+          <p class="sale-error" aria-live="polite">{{ submitError() }}</p>
+        }
+
         <div class="submit-row">
-          <button type="submit" [disabled]="!saleForm.valid">Guardar venta</button>
+          <button
+            type="submit"
+            [disabled]="!saleForm.valid || saleDetails.length === 0 || savingSale()"
+          >
+            @if (savingSale()) {
+              Guardando...
+            } @else {
+              Guardar venta
+            }
+          </button>
         </div>
 
         @if (savedSale(); as sale) {
           <section class="panel confirmation" aria-live="polite">
             <h2>Venta guardada</h2>
             <p>
-              Cliente: <strong>{{ sale.customerName }}</strong> - Documento:
-              <strong>{{ sale.documentType }}</strong>
+              Documento: <strong>{{ sale.documentType }}</strong>
               {{ sale.documentNumber }}
             </p>
             <p>
@@ -133,6 +215,26 @@
       </form>
     </section>
   </main>
+
+  <section
+    class="sales-modal-overlay"
+    [class.is-open]="showSalesModal()"
+    [attr.aria-hidden]="!showSalesModal()"
+    (click)="closeSalesModalOnBackdrop($event)"
+    aria-modal="true"
+    role="dialog"
+    aria-label="Listado de ventas realizadas"
+  >
+    <div class="sales-modal-card">
+      <div class="sales-modal-header">
+        <div class="sales-title-modal">
+          <h2>Historial de ventas</h2>
+        </div>
+        <button type="button" class="btn-danger" (click)="closeSalesModal()">Cerrar</button>
+      </div>
+      <app-lst-sale></app-lst-sale>
+    </div>
+  </section>
 
   <footer class="footer">
     <p>&copy; 2026 PoliMarket. Todos los derechos reservados.</p>

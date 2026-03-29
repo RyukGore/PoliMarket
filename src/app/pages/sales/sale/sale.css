@@ -1,3 +1,171 @@
 :host {
-	display: block;
+  display: block;
+}
+
+.banner {
+  text-align: left;
+}
+
+.sale-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.sale-header-copy h1 {
+  margin: 0;
+}
+
+.sale-header-copy p {
+  margin: 0.4rem 0 0;
+  opacity: 0.92;
+}
+
+.sale-menu {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.sale-menu-item {
+  background: transparent;
+  color: #fff;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  padding: 0.35rem 0.1rem 0.45rem;
+  font-weight: 600;
+  opacity: 0.84;
+}
+
+.sale-menu-item:hover:not(:disabled) {
+  opacity: 1;
+  border-bottom-color: rgba(255, 255, 255, 0.55);
+  transform: none;
+}
+
+.sale-menu-item.is-active {
+  opacity: 1;
+  border-bottom-color: #fff;
+}
+
+.sales-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(16, 24, 40, 0.55);
+  display: none;
+  place-items: center;
+  padding: 1rem;
+  z-index: 999;
+}
+
+.sales-modal-overlay.is-open {
+  display: grid;
+}
+
+.sales-modal-card {
+  width: min(1100px, 100%);
+  max-height: 90vh;
+  overflow: auto;
+  background: #fff;
+  border-radius: 14px;
+  padding: 1rem;
+  box-shadow: 0 24px 60px rgba(16, 24, 40, 0.35);
+}
+
+.sales-modal-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.9rem;
+  min-height: 2.25rem;
+}
+
+.sales-title-modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.sales-modal-header h2 {
+  margin: 0;
+}
+
+.sales-modal-header .btn-danger {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.sales-modal-toolbar {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.75rem;
+  align-items: end;
+  margin-bottom: 0.9rem;
+}
+
+.sales-modal-toolbar label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.detail-list {
+  margin: 0;
+  padding-left: 1.2rem;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.detail-list li {
+  display: flex;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+}
+
+.sale-error {
+  margin: 0;
+  color: #b42318;
+  font-weight: 600;
+}
+
+.sale-note {
+  margin: 0.75rem 0 0;
+  color: #516071;
+}
+
+@media (max-width: 860px) {
+  .sale-header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.8rem;
+  }
+
+  .sale-menu {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 0.3rem;
+  }
+
+  .sales-modal-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .sales-modal-header {
+    min-height: unset;
+    padding-right: 0;
+  }
+
+  .sales-modal-header .btn-danger {
+    position: static;
+    transform: none;
+    margin-left: auto;
+  }
 }

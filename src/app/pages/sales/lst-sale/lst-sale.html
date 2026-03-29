@@ -1,0 +1,60 @@
+<section class="sales-list" aria-labelledby="sales-title">
+  <header class="sales-toolbar">
+    <div class="title-group">
+      <button type="button" class="btn-secondary" (click)="loadSales()" [disabled]="loading()">
+        Actualizar
+      </button>
+    </div>
+  </header>
+
+  @if (loading()) {
+    <p>Cargando ventas...</p>
+  }
+
+  @if (loadError()) {
+    <p class="sale-error" aria-live="polite">{{ loadError() }}</p>
+  }
+
+  @if (!loading() && filteredSales().length === 0) {
+    <p class="sale-note">No hay ventas para los filtros seleccionados.</p>
+  }
+
+  @if (filteredSales().length > 0) {
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Documento cliente</th>
+            <th>Fecha</th>
+            <th>Vendedor</th>
+            <th>Detalle</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (sale of filteredSales(); track sale.idVenta) {
+            <tr>
+              <td>{{ sale.documentoCliente }}</td>
+              <td>{{ sale.fecha | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ sale.idVendedor }}</td>
+              <td>
+                <ul class="detail-list">
+                  @for (detail of sale.detallesVentas; track detail.idProducto + '-' + $index) {
+                    <li>
+                      <span
+                        >Producto:
+                        <strong>{{ detail.idProducto }} - {{ detail.nombreProducto }}</strong></span
+                      >
+                      <span
+                        >Cantidad: <strong>{{ detail.cantidad }}</strong></span
+                      >
+                    </li>
+                  }
+                </ul>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>
