@@ -35,7 +35,7 @@ export class Home {
     this.authError.set('');
 
     this.humanResourcesService.authorizeByNit(idLimpio).subscribe({
-      next: (res) => {
+      next: () => {
         localStorage.setItem('polimarket_idVendedor', idLimpio);
         void this.router.navigate(['/sale']);
       },
@@ -50,5 +50,9 @@ export class Home {
         }
       },
     });
+  }
+
+  goToAddVendedor(): void {
+    void this.router.navigate(['/add-vendedor']);
   }
 }
