@@ -29,8 +29,10 @@
         @if (authError()) {
           <small class="auth-error" aria-live="polite">{{ authError() }}</small>
         }
-        <br />
-        <button type="submit" [disabled]="!form.valid">Ingresar</button>
+        <div class="actions">
+          <button type="submit" [disabled]="!form.valid">Ingresar</button>
+          <button type="button" class="secondary-action">Agregar Vendedor</button>
+        </div>
       </form>
     </section>
   </main>
